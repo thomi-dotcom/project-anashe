@@ -6,7 +6,8 @@
   const config = window.SITE_CONFIG || {};
 
   const BUSINESS_NAME = config.business?.name || "Maison Lúmina";
-  const WHATSAPP_PHONE = (config.whatsapp?.phone || "").replace(/\D/g, "") || "5491112345678";
+  const WHATSAPP_PHONE =
+    (config.whatsapp?.phone || "").replace(/\D/g, "") || "5491137725761";
   const WHATSAPP_DEFAULT_MESSAGE =
     config.whatsapp?.defaultMessage ||
     `Hola! Quisiera hacer una consulta / reserva en ${BUSINESS_NAME} 😊`;
@@ -38,13 +39,14 @@
   if ($year) $year.textContent = String(new Date().getFullYear());
 
   const $hoursText = $$("#hoursText");
-  if ($hoursText && config.hours?.text) $hoursText.textContent = config.hours.text;
+  if ($hoursText && config.hours?.text)
+    $hoursText.textContent = config.hours.text;
 
   const fmt = new Intl.NumberFormat("es-AR");
 
   const state = {
     data: null,
-    activeSectionId: "all",
+    activeSectionId: "desayunos",
     q: "",
     loading: true,
   };
@@ -182,8 +184,8 @@
       return b;
     };
 
-    $menuChips.appendChild(mk("all", "Todo"));
     for (const s of sections) $menuChips.appendChild(mk(s.id, s.title));
+    $menuChips.appendChild(mk("all", "Todo"));
   }
 
   // ---------- Render Menu ----------
@@ -230,10 +232,12 @@
         const detailHtml = desc
           ? `<p>${desc}</p>`
           : extra
-            ? `<p class="muted">${extra}</p>`
-            : ``;
+          ? `<p class="muted">${extra}</p>`
+          : ``;
 
-        const badgeHtml = schedule ? `<span class="badge">${schedule}</span>` : ``;
+        const badgeHtml = schedule
+          ? `<span class="badge">${schedule}</span>`
+          : ``;
 
         cards.push(`
           <article class="menuItem reveal" data-cat="${s.title}">
@@ -273,7 +277,9 @@
     }
 
     if (!res.ok) {
-      throw new Error(`No se pudo cargar ${url}. HTTP ${res.status} ${res.statusText}`);
+      throw new Error(
+        `No se pudo cargar ${url}. HTTP ${res.status} ${res.statusText}`
+      );
     }
 
     const text = await res.text();

@@ -8,7 +8,7 @@ window.SITE_CONFIG = {
   },
 
   whatsapp: {
-    phone: "5491112345678", // demo
+    phone: "5491137725761", // demo
     defaultMessage:
       "Hola! Quisiera hacer una consulta / reserva 😊",
   },
