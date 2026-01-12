@@ -159,8 +159,8 @@
       "items": [
         { "name": "Croissant", "price": 2600 },
         { "name": "Pain au chocolat", "price": 3200 },
-        { "name": "Scone dulce", "price": 3600 },
-        { "name": "Scone de queso", "price": 4500 },
+        { "name": "Scon dulce", "price": 3600 },
+        { "name": "Scon de queso", "price": 4500 },
         { "name": "Cookies", "price": 3600 },
         { "name": "Budín cítrico", "price": 5800 }
       ]
@@ -183,7 +183,7 @@
         {
           "name": "Brunch Maison",
           "price": 52900,
-          "note": "Sábados, domingos y feriados 11:00–15:00"
+          "note": "Ideal para compartir (2 personas). Incluye: 2 infusiones, 2 jugos cítricos, huevos revueltos, tostadas de campo, croissant, scons dulce, waffle de crema y frutos rojos, frutas frescas y mini pâtisserie."
         },
         { "name": "Waffle dulce de leche & cacao", "price": 11200 },
         { "name": "Waffle crema & frutos rojos", "price": 10400 },
@@ -214,14 +214,22 @@
       "id": "sandwiches",
       "title": "Sándwiches",
       "items": [
-        { "name": "Croque Monsieur", "price": 19800 },
+        {
+          "name": "Sandwich mediterraneo",
+          "price": 19800,
+          "desc": "Sandwich en pan ciabatta con jamón crudo, tomates confitados, oliva y rúcula",
+          "image": "./assets/sandwich_mediterraneo.jpg"
+        },
         {
           "name": "Bagel de salmón",
           "price": 28900,
-          "note": "Opción jamón crudo: $21900"
+          "note": "Opción jamón crudo: $21900",
+          "image": "./assets/bagel.jpg"
         },
-        { "name": "Vegetariano Maison", "price": 20900 },
-        { "name": "Chicken Dijon", "price": 22900 }
+        { "name": "Vegetariano Maison", "price": 20900,
+      "image": "./assets/bagel.jpg"},
+        { "name": "Chicken Dijon", "price": 22900,
+      "image": "./assets/sandwich_mediterraneo.jpg" }
       ]
     },
     {

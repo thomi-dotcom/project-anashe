@@ -6,8 +6,7 @@
   const config = window.SITE_CONFIG || {};
 
   const BUSINESS_NAME = config.business?.name || "Maison Lúmina";
-  const WHATSAPP_PHONE =
-    (config.whatsapp?.phone || "").replace(/\D/g, "") || "5491137725761";
+  const WHATSAPP_PHONE = (config.whatsapp?.phone || "").replace(/\D/g, "") || "5491112345678";
   const WHATSAPP_DEFAULT_MESSAGE =
     config.whatsapp?.defaultMessage ||
     `Hola! Quisiera hacer una consulta / reserva en ${BUSINESS_NAME} 😊`;
@@ -39,8 +38,7 @@
   if ($year) $year.textContent = String(new Date().getFullYear());
 
   const $hoursText = $$("#hoursText");
-  if ($hoursText && config.hours?.text)
-    $hoursText.textContent = config.hours.text;
+  if ($hoursText && config.hours?.text) $hoursText.textContent = config.hours.text;
 
   const fmt = new Intl.NumberFormat("es-AR");
 
@@ -215,44 +213,51 @@
 
     for (const s of visible) {
       for (const it of s.items || []) {
-        if (!matchesItem(it, q)) continue;
+      if (!matchesItem(it, q)) continue;
 
-        const p = priceText(it.price);
+      const p = priceText(it.price);
 
-        const note = it.note || "";
-        const desc = it.desc || "";
+      const note = it.note || "";
+      const desc = it.desc || "";
 
-        const schedule = isScheduleNote(note) ? note : "";
-        const extra = !schedule ? note : "";
+      const schedule = isScheduleNote(note) ? note : "";
+      const extra = !schedule ? note : "";
 
-        const msg = `Hola! Quiero pedir/consultar: ${it.name} (${s.title}) — ${BUSINESS_NAME}.`;
-        const askHref = waLink(msg);
+      const msg = `Hola! Quiero pedir/consultar: ${it.name} (${s.title}) — ${BUSINESS_NAME}.`;
+      const askHref = waLink(msg);
 
-        // ✅ Si no hay desc/nota útil: no mostramos contenido extra
-        const detailHtml = desc
-          ? `<p>${desc}</p>`
-          : extra
-          ? `<p class="muted">${extra}</p>`
-          : ``;
+      const detailHtml = desc
+        ? `<p>${desc}</p>`
+        : extra
+        ? `<p class="muted">${extra}</p>`
+        : ``;
 
-        const badgeHtml = schedule
-          ? `<span class="badge">${schedule}</span>`
-          : ``;
+      const badgeHtml = schedule ? `<span class="badge">${schedule}</span>` : ``;
 
-        cards.push(`
-          <article class="menuItem reveal" data-cat="${s.title}">
-            <p class="cat">${s.title}</p>
-            <div class="titleRow">
-              <h4>${it.name}</h4>
-              ${badgeHtml}
-            </div>
-            ${detailHtml}
-            <div class="bottom">
-              <div class="price">${p}</div>
-              <a class="quick" href="${askHref}" target="_blank" rel="noopener">Pedir</a>
-            </div>
-          </article>
-        `);
+     const imageHtml = it.image
+  ? `
+    <div class="imageWrap">
+      <img src="${it.image}" alt="${it.name}" class="dishImage">
+    </div>
+  `
+  : ``;
+
+
+      cards.push(`
+        <article class="menuItem reveal" data-cat="${s.title}">
+        <p class="cat">${s.title}</p>
+        <div class="titleRow">
+          <h4>${it.name}</h4>
+          ${badgeHtml}
+        </div>
+        ${detailHtml}
+        ${imageHtml}
+        <div class="bottom">
+          <div class="price">${p}</div>
+          <a class="quick" href="${askHref}" target="_blank" rel="noopener">Pedir</a>
+        </div>
+        </article>
+      `);
       }
     }
 
@@ -277,9 +282,7 @@
     }
 
     if (!res.ok) {
-      throw new Error(
-        `No se pudo cargar ${url}. HTTP ${res.status} ${res.statusText}`
-      );
+      throw new Error(`No se pudo cargar ${url}. HTTP ${res.status} ${res.statusText}`);
     }
 
     const text = await res.text();

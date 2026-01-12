@@ -253,6 +253,21 @@ h1 {
   box-shadow: var(--shadow);
   backdrop-filter: blur(14px);
 }
+.imageWrap {
+  width: 100%;
+  height: 150px;          /* ajustá a gusto */
+  overflow: hidden;
+  border-radius: 12px;
+  margin: 10px 0;
+}
+
+.dishImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; 
+  object-position: center 40%;/* 🔑 */
+  display: flex;
+}
 .row {
   display: flex;
   justify-content: space-between;
