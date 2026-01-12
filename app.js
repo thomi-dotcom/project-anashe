@@ -213,51 +213,50 @@
 
     for (const s of visible) {
       for (const it of s.items || []) {
-      if (!matchesItem(it, q)) continue;
+        if (!matchesItem(it, q)) continue;
 
-      const p = priceText(it.price);
+        const p = priceText(it.price);
 
-      const note = it.note || "";
-      const desc = it.desc || "";
+        const note = it.note || "";
+        const desc = it.desc || "";
 
-      const schedule = isScheduleNote(note) ? note : "";
-      const extra = !schedule ? note : "";
+        const schedule = isScheduleNote(note) ? note : "";
+        const extra = !schedule ? note : "";
 
-      const msg = `Hola! Quiero pedir/consultar: ${it.name} (${s.title}) — ${BUSINESS_NAME}.`;
-      const askHref = waLink(msg);
+        const msg = `Hola! Quiero pedir/consultar: ${it.name} (${s.title}) — ${BUSINESS_NAME}.`;
+        const askHref = waLink(msg);
 
-      const detailHtml = desc
-        ? `<p>${desc}</p>`
-        : extra
-        ? `<p class="muted">${extra}</p>`
-        : ``;
+        const detailHtml = desc
+          ? `<p>${desc}</p>`
+          : extra
+          ? `<p class="muted">${extra}</p>`
+          : ``;
 
-      const badgeHtml = schedule ? `<span class="badge">${schedule}</span>` : ``;
+        const badgeHtml = schedule ? `<span class="badge">${schedule}</span>` : ``;
 
-     const imageHtml = it.image
-  ? `
-    <div class="imageWrap">
-      <img src="${it.image}" alt="${it.name}" class="dishImage">
-    </div>
-  `
-  : ``;
+        const imageHtml = it.image
+          ? `
+            <div class="imageWrap">
+              <img src="${it.image}" alt="${it.name}" class="dishImage">
+            </div>
+          `
+          : ``;
 
-
-      cards.push(`
-        <article class="menuItem reveal" data-cat="${s.title}">
-        <p class="cat">${s.title}</p>
-        <div class="titleRow">
-          <h4>${it.name}</h4>
-          ${badgeHtml}
-        </div>
-        ${detailHtml}
-        ${imageHtml}
-        <div class="bottom">
-          <div class="price">${p}</div>
-          <a class="quick" href="${askHref}" target="_blank" rel="noopener">Pedir</a>
-        </div>
-        </article>
-      `);
+        cards.push(`
+          <article class="menuItem reveal" data-cat="${s.title}">
+            <p class="cat">${s.title}</p>
+            <div class="titleRow">
+              <h4>${it.name}</h4>
+              ${badgeHtml}
+            </div>
+            ${detailHtml}
+            ${imageHtml}
+            <div class="bottom">
+              <div class="price">${p}</div>
+              <a class="quick" href="${askHref}" target="_blank" rel="noopener">Pedir</a>
+            </div>
+          </article>
+        `);
       }
     }
 
@@ -269,42 +268,39 @@
   }
 
   // ---------- Load Menu JSON ----------
- async function loadMenu() {
-  // 1) Si hay menú editado por admin, usamos ese
-  const override = localStorage.getItem("menu_override_v1");
-  if (override) {
-    try {
-      return JSON.parse(override);
-    } catch (e) {
-      console.warn("menu_override_v1 inválido, lo ignoro");
-      localStorage.removeItem("menu_override_v1");
+  async function loadMenu() {
+    // 1) Si hay menú editado por admin, usamos ese
+    const override = localStorage.getItem("menu_override_v1");
+    if (override) {
+      try {
+        return JSON.parse(override);
+      } catch (e) {
+        console.warn("menu_override_v1 inválido, lo ignoro");
+        localStorage.removeItem("menu_override_v1");
+      }
     }
-  }
+
+    // 2) Si no, cargamos el menu.json normal
+    const url = "./data/menu.json";
+    let res;
+
+    try {
+      res = await fetch(url, { cache: "no-store" });
+    } catch (e) {
+      throw new Error(`Fetch falló (${url}). ¿file://? Usá un server local. Detalle: ${e.message}`);
+    }
 
     if (!res.ok) {
       throw new Error(`No se pudo cargar ${url}. HTTP ${res.status} ${res.statusText}`);
     }
-  // 2) Si no, cargamos el menu.json normal
-  const url = "./data/menu.json";
-  let res;
 
-  try {
-    res = await fetch(url, { cache: "no-store" });
-  } catch (e) {
-    throw new Error(`Fetch falló (${url}). ¿file://? Usá un server local. Detalle: ${e.message}`);
+    const text = await res.text();
+    try {
+      return JSON.parse(text);
+    } catch (e) {
+      throw new Error(`JSON inválido en ${url}: ${e.message}`);
+    }
   }
-
-  if (!res.ok) {
-    throw new Error(`No se pudo cargar ${url}. HTTP ${res.status} ${res.statusText}`);
-  }
-
-  const text = await res.text();
-  try {
-    return JSON.parse(text);
-  } catch (e) {
-    throw new Error(`JSON inválido en ${url}: ${e.message}`);
-  }
-}
 
   // ---------- Init ----------
   async function init() {
