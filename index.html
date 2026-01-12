@@ -1,8 +1,6 @@
-<!-- index.html (completo, listo para pegar) -->
 <!doctype html>
 <html lang="es">
 <head>
-  <!-- Fonts: Paris pâtisserie vibe -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -75,8 +73,16 @@
       </div>
     </div>
 
-    <div class="hero__fade" aria-hidden="true"></div>
+    <!-- <div class="hero__fade" aria-hidden="true"></div> -->
   </section>
+
+  <section class="bgShowcase" aria-label="Ambientes Maison Lúmina">
+  <div class="bgShowcase__grid">
+    <div class="bgShowcase__tile bgShowcase__tile--patio" role="img" aria-label="Patio con luces cálidas"></div>
+    <div class="bgShowcase__tile bgShowcase__tile--interior" role="img" aria-label="Interior con mostrador de pastelería"></div>
+  </div>
+</section>
+
 
   <main class="container" role="main">
 
@@ -176,6 +182,14 @@
 
   <footer class="footer">
     <p class="muted">© <span id="year"></span> Maison Lúmina</p>
+    <a
+  class="btn btn--ghost"
+  href="./admin.html"
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  Admin
+</a>
   </footer>
 
   <script src="config.js"></script>

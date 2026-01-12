@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin | Maison Lúmina</title>
+  <style>
+  :root{
+    --bg:#fbfaf7;
+    --card:#ffffff;
+    --text:#1f1f1d;
+    --muted:rgba(31,31,29,.65);
+    --border:rgba(31,31,29,.10);
+    --olive:#2e5b3b;
+    --olive-2:#244a31;
+    --radius:16px;
+    --shadow-sm:0 10px 26px rgba(22,18,12,.07);
+    --shadow-md:0 18px 46px rgba(22,18,12,.10);
+  }
+
+  *{ box-sizing:border-box; }
+
+  body{
+    margin:0;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    background:
+      radial-gradient(900px 600px at 18% -10%, rgba(46,91,59,.10), transparent 60%),
+      var(--bg);
+    color:var(--text);
+  }
+
+  .wrap{
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 22px 20px 60px;
+  }
+
+  /* Header */
+  .top{
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    gap:14px;
+    flex-wrap:wrap;
+    margin-bottom: 16px;
+  }
+
+  h1{
+    margin:0 0 6px;
+    font-size: 28px;
+    letter-spacing:.01em;
+  }
+
+  .muted{
+    color:var(--muted);
+    font-size:14px;
+  }
+
+  .row{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    align-items:center;
+  }
+
+  /* Buttons */
+  .btn{
+    padding:10px 14px;
+    border-radius:12px;
+    border:1px solid var(--border);
+    background:#fff;
+    cursor:pointer;
+    font-weight:600;
+    transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+  }
+
+  .btn:hover{
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .btnPrimary{
+    background: linear-gradient(180deg, var(--olive), var(--olive-2));
+    color:#fff;
+    border-color: rgba(46,91,59,.35);
+    box-shadow: 0 14px 30px rgba(46,91,59,.22);
+  }
+
+  .btnPrimary:hover{
+    box-shadow: 0 18px 40px rgba(46,91,59,.28);
+  }
+
+  /* Cards */
+  .card{
+    background: var(--card);
+    border:1px solid var(--border);
+    border-radius: var(--radius);
+    padding:16px;
+    box-shadow: var(--shadow-sm);
+  }
+
+  /* Status */
+  #status{
+    font-size:14px;
+  }
+
+  /* Table */
+  table{
+    width:100%;
+    border-collapse: collapse;
+  }
+
+  thead th{
+    text-align:left;
+    font-size:12px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--muted);
+    padding:10px 8px;
+    border-bottom:1px solid var(--border);
+  }
+
+  tbody tr{
+    transition: background .12s ease;
+  }
+
+  tbody tr:hover{
+    background: rgba(46,91,59,.04);
+  }
+
+  td{
+    padding:10px 8px;
+    border-bottom:1px solid rgba(31,31,29,.06);
+    vertical-align: middle;
+    font-size:14px;
+  }
+
+  /* Inputs */
+  input[type="number"]{
+    width:120px;
+    padding:8px 10px;
+    border-radius:10px;
+    border:1px solid rgba(31,31,29,.18);
+    font-size:14px;
+  }
+
+  input[type="number"]:focus{
+    outline:none;
+    border-color: rgba(46,91,59,.45);
+    box-shadow: 0 0 0 4px rgba(46,91,59,.18);
+  }
+
+  /* Footer hint */
+  .hint{
+    margin-top:12px;
+    font-size:13px;
+    color:var(--muted);
+  }
+
+  code{
+    background: rgba(31,31,29,.06);
+    padding:3px 6px;
+    border-radius:6px;
+    font-size:12px;
+  }
+
+  @media (max-width: 720px){
+    h1{ font-size:24px; }
+    input[type="number"]{ width:100px; }
+  }
+  /* ---- PIN overlay ---- */
+.pinOverlay{
+  position: fixed;
+  inset: 0;
+  background: rgba(251,250,247,.92);
+  backdrop-filter: blur(10px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding: 18px;
+  z-index: 9999;
+}
+
+.pinCard{
+  width: min(520px, 100%);
+  background: #fff;
+  border: 1px solid rgba(31,31,29,.10);
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow: 0 18px 46px rgba(22,18,12,.12);
+}
+
+.pinTitle{ margin: 0 0 6px; font-size: 22px; }
+.pinRow{ display:flex; gap:10px; flex-wrap:wrap; margin-top: 12px; }
+.pinInput{
+  flex: 1 1 220px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(31,31,29,.18);
+  font-size: 16px;
+}
+.pinInput:focus{
+  outline:none;
+  border-color: rgba(46,91,59,.45);
+  box-shadow: 0 0 0 4px rgba(46,91,59,.18);
+}
+.pinError{ margin-top: 10px; color: #a12020; font-size: 13px; display:none; }
+
+</style>
+</head>
+
+<body>
+  <div class="pinOverlay" id="pinOverlay" aria-label="Acceso protegido">
+  <div class="pinCard">
+    <h2 class="pinTitle">Acceso Admin</h2>
+    <p class="muted" style="margin:0;">Ingresá el PIN para editar precios.</p>
+
+    <div class="pinRow">
+      <input class="pinInput" id="pinInput" type="password" inputmode="numeric" placeholder="PIN (4–6 dígitos)" autocomplete="one-time-code" />
+      <button class="btn btnPrimary" id="pinBtn">Entrar</button>
+    </div>
+
+    <div class="pinError" id="pinError">PIN incorrecto.</div>
+    <p class="muted" style="margin:12px 0 0; font-size:12px;">Demo: este PIN está en el código (sin backend).</p>
+  </div>
+</div>
+  <div class="wrap">
+    <div class="top">
+      <div>
+        <h1 style="margin:0 0 6px;">Admin — precios</h1>
+        <div class="muted">Editás precios, guardás, y la carta (index) los toma desde este navegador.</div>
+      </div>
+
+      <div class="row">
+        <button class="btn" id="btnReset">Reset (volver al JSON)</button>
+        <button class="btn" id="btnExport">Exportar menu.json</button>
+        <button class="btn btnPrimary" id="btnSave">Guardar cambios</button>
+      </div>
+    </div>
+
+    <div style="height:12px;"></div>
+
+    <div class="card muted" id="status">Cargando…</div>
+
+    <div style="height:12px;"></div>
+
+    <div class="card">
+      <table>
+        <thead>
+          <tr>
+            <th>Sección</th>
+            <th>Producto</th>
+            <th>Precio</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+
+    <p class="muted" style="margin-top:12px;">
+      Tip: para que los cambios los vean todos, exportá el JSON y reemplazá <code>./data/menu.json</code> en el deploy.
+    </p>
+  </div>
+
+<script>
+  // ---- PIN (demo, sin backend) ----
+  const ADMIN_PIN = "1433"; // <-- cambiá el PIN acá
+
+  const overlay = document.getElementById("pinOverlay");
+  const input = document.getElementById("pinInput");
+  const btn = document.getElementById("pinBtn");
+  const err = document.getElementById("pinError");
+
+  function unlock(){
+    overlay.style.display = "none";
+  }
+
+  function check(){
+    const v = String(input.value || "").trim();
+    if (v === ADMIN_PIN){
+      unlock();
+    } else {
+      err.style.display = "block";
+      input.focus();
+      input.select?.();
+    }
+  }
+
+  btn.addEventListener("click", check);
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") check();
+  });
+
+  input.focus();
+</script>
+
+<script>
+(async () => {
+  const $ = (s) => document.querySelector(s);
+  const status = $("#status");
+  const tbody = $("#tbody");
+
+  const STORAGE_KEY = "menu_override_v1";
+  let menu = null;
+
+  async function loadBaseMenu(){
+    const res = await fetch("./data/menu.json", { cache: "no-store" });
+    if(!res.ok) throw new Error("No pude cargar ./data/menu.json");
+    return res.json();
+  }
+
+  function loadOverride(){
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return null;
+    try { return JSON.parse(raw); } catch { return null; }
+  }
+
+  function render(){
+    tbody.innerHTML = "";
+    for(const section of (menu.sections || [])){
+      for(const item of (section.items || [])){
+        const tr = document.createElement("tr");
+
+        const tdS = document.createElement("td");
+        tdS.textContent = section.title;
+
+        const tdN = document.createElement("td");
+        tdN.textContent = item.name;
+
+        const tdP = document.createElement("td");
+        const inp = document.createElement("input");
+        inp.type = "number";
+        inp.min = "0";
+        inp.step = "100";
+        inp.value = (typeof item.price === "number") ? item.price : 0;
+
+        inp.addEventListener("input", () => {
+          const v = Number(inp.value);
+          item.price = Number.isFinite(v) ? v : item.price;
+        });
+
+        tdP.appendChild(inp);
+
+        tr.appendChild(tdS);
+        tr.appendChild(tdN);
+        tr.appendChild(tdP);
+
+        tbody.appendChild(tr);
+      }
+    }
+    status.textContent = "Listo. Editá precios y tocá Guardar.";
+  }
+
+  function downloadJSON(obj, filename){
+    const blob = new Blob([JSON.stringify(obj, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  $("#btnSave").addEventListener("click", () => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(menu));
+    status.textContent = "Guardado ✅ (recargá el index para ver los cambios).";
+  });
+
+  $("#btnReset").addEventListener("click", async () => {
+    localStorage.removeItem(STORAGE_KEY);
+    menu = await loadBaseMenu();
+    render();
+    status.textContent = "Reset listo ✅ (volviste al JSON original).";
+  });
+
+  $("#btnExport").addEventListener("click", () => {
+    downloadJSON(menu, "menu.json");
+  });
+
+  try{
+    menu = loadOverride() || await loadBaseMenu();
+    render();
+  }catch(e){
+    status.textContent = "Error: " + (e.message || e);
+  }
+})();
+</script>
+</body>
+</html>
