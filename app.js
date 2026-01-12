@@ -10,7 +10,7 @@
     (config.whatsapp?.phone || "").replace(/\D/g, "") || "5491137725761";
   const WHATSAPP_DEFAULT_MESSAGE =
     config.whatsapp?.defaultMessage ||
-    `Hola! Quisiera hacer una consulta / reserva en ${BUSINESS_NAME} 😊`;
+    `Hola! Quisiera hacer una consulta / reserva en ${BUSINESS_NAME}`;
 
   // Mapa: podés proveer mapsUrl y mapsEmbed desde config.js
   // Si no están, construimos a partir de un "mapsQuery" (address)
@@ -264,31 +264,39 @@
   }
 
   // ---------- Load Menu JSON ----------
-  async function loadMenu() {
-    const url = "./data/menu.json";
-    let res;
-
+ async function loadMenu() {
+  // 1) Si hay menú editado por admin, usamos ese
+  const override = localStorage.getItem("menu_override_v1");
+  if (override) {
     try {
-      res = await fetch(url, { cache: "no-store" });
+      return JSON.parse(override);
     } catch (e) {
-      throw new Error(
-        `Fetch falló (${url}). ¿Estás abriendo con file://? Usá un server local. Detalle: ${e.message}`
-      );
-    }
-
-    if (!res.ok) {
-      throw new Error(
-        `No se pudo cargar ${url}. HTTP ${res.status} ${res.statusText}`
-      );
-    }
-
-    const text = await res.text();
-    try {
-      return JSON.parse(text);
-    } catch (e) {
-      throw new Error(`JSON inválido en ${url}: ${e.message}`);
+      console.warn("menu_override_v1 inválido, lo ignoro");
+      localStorage.removeItem("menu_override_v1");
     }
   }
+
+  // 2) Si no, cargamos el menu.json normal
+  const url = "./data/menu.json";
+  let res;
+
+  try {
+    res = await fetch(url, { cache: "no-store" });
+  } catch (e) {
+    throw new Error(`Fetch falló (${url}). ¿file://? Usá un server local. Detalle: ${e.message}`);
+  }
+
+  if (!res.ok) {
+    throw new Error(`No se pudo cargar ${url}. HTTP ${res.status} ${res.statusText}`);
+  }
+
+  const text = await res.text();
+  try {
+    return JSON.parse(text);
+  } catch (e) {
+    throw new Error(`JSON inválido en ${url}: ${e.message}`);
+  }
+}
 
   // ---------- Init ----------
   async function init() {
